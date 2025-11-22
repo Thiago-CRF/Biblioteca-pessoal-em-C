@@ -76,7 +76,7 @@ void adicionar_livro(No **head_livros){
         novo->livro.paginas_lidas = novo->livro.paginas_tot;
     } else 
         if(novo->livro.status == NAO_LIDO){
-            novo->livro.paginas_lidas == 0;
+            novo->livro.paginas_lidas = 0;
         } else {
         printf("\nDigite a quantidade de paginas lidas: ");
         scanf("%d", &novo->livro.paginas_lidas);
@@ -90,7 +90,7 @@ void adicionar_livro(No **head_livros){
         printf("\n# Livro registrado com sucesso #\n");
 }
 
-void listar_livros(No *head_livros){ //apenas lista um cada livro por id de ordem, titulo e autor com um ponteiro auxiliar
+void listar_livros(const No *head_livros){ //apenas lista um cada livro por id de ordem, titulo e autor com um ponteiro auxiliar
     printf("\n");
     
     No *aux = head_livros;
