@@ -18,7 +18,7 @@ typedef struct No {
     struct No *prox;
 } No;
 
-/* adiciona um livro no começo da lista, fazendo o mais recente ser a cabeça*/
+/* adiciona um livro no fim da lista*/
 
 // funções dos livros
 void adicionar_livro(No **head_livros); /* OK Adiciona um livro, pedindo que digite   

@@ -1,6 +1,5 @@
 #ifndef DADOS_H
 #define DADOS_H
-#include "livros.h"
 
 #define ARQUIVO_LIVROS "livros.txt"
 

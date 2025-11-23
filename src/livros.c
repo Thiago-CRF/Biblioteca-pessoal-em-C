@@ -32,6 +32,8 @@ char *ler_string(){
 
     strcpy(str, buffer); // copia a string do buffer para a memória alocada
 
+    while(getchar() != '\n'); // limpa o buffer do scanf
+
     return str;
 }
 
@@ -71,7 +73,7 @@ void adicionar_livro(No **head_livros){
         printf("\nDigite a opcao do status de leitura:");
         printf("0-Nao lido; 1-Lendo/Iniciado; 2-Lido\n");
         scanf("%d", &status);
-        if(status >=0 && status <=2){
+        if(status >=0 || status <=2){
             printf("\nOpcao invalida, escolha novamente\n");
         }
     } while(status >=0 && status <=2);
@@ -91,8 +93,17 @@ void adicionar_livro(No **head_livros){
 
     while(getchar() != '\n'); // limpa o buffer do scanf
 
-    novo->prox = *head_livros;
-    *head_livros = novo;
+    novo->prox = NULL;
+    if(*head_livros == NULL){
+        *head_livros = novo;
+        return;
+    }
+
+    No* atual = *head_livros;
+    while(atual->prox != NULL){
+        atual = atual->prox;
+    }
+    atual->prox = novo;
 
         printf("\n# Livro registrado com sucesso. #\n");
 }
