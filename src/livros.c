@@ -4,11 +4,8 @@
 #include "livros.h"
 
 /* MELHORIAS/CORREÇÕES DE BUGAS A FAZER:
-    Verificar se o id de livro digitado é valido, (se não é menor que 0 ou maior que o ID do ultimo livro listado), fazendo um contador 
-    de livros na função adicionar ou na função listar(provavelmente melhor) e mandando para onde precisa, nas funções remover livro(ok), 
-    editar progresso(ok) e mostrar livro.
-
-    Melhoria: criar um comando para cancelar operação (ctrl + algo) para cancelar o que está fazendo e voltar ao menu
+    Melhoria: criar um comando para cancelar operação (ctrl + algo) para cancelar o que está fazendo e voltar ao menu, ou colocar um opção de cancelamento para tudo o que for fazer,
+    como tem na função de remover livro.
 */
 
 char *ler_string(){
@@ -97,7 +94,7 @@ void adicionar_livro(No **head_livros){
     novo->prox = *head_livros;
     *head_livros = novo;
 
-        printf("\n# Livro registrado com sucesso #\n");
+        printf("\n# Livro registrado com sucesso. #\n");
 }
 
 void remover_livro(No **head_livros){
@@ -112,14 +109,24 @@ void remover_livro(No **head_livros){
     int total = listar_livros(head_livros);
     
      int id;
-    printf("\nDigite o ID do livro para ser removido: ");
+    printf("\nDigite o ID do livro a ser removido (ou 0 para cancelar): ");
     scanf("%d", &id);
     
+    if(id == 0){
+        printf("\n# Operacao cancelada. #\n");
+        return;
+    }
+
     if(id<1 || id>total){
         do{
             printf("'ID' digitado invalido.");
-            printf("\nDigite o ID do livro para ser removido: ");
+            printf("\nDigite o ID do livro para ser removido (ou 0 para cancelar): ");
             scanf("%d", &id);
+
+            if(id == 0){
+                printf("\n# Operacao cancelada. #\n");
+                return;
+            }
         } while(id<1 || id>total);
     }
     
@@ -128,7 +135,7 @@ void remover_livro(No **head_livros){
         No* aux = *head_livros;
         *head_livros = (*head_livros)->prox;
         free(aux);
-        printf("\nLivro removido com sucesso.\n");
+        printf("\n# Livro removido com sucesso. #\n");
         return;
     } 
 
@@ -140,7 +147,7 @@ void remover_livro(No **head_livros){
     No* temp = aux->prox;
     aux->prox = temp->prox;
     free(temp);
-    printf("\nLivro removido com sucesso.\n"); 
+    printf("\n# Livro removido com sucesso. #\n"); 
 }
 
 int listar_livros(const No *head_livros){ //apenas lista um cada livro por id de ordem, titulo e autor com um ponteiro auxiliar
@@ -170,14 +177,24 @@ void editar_progresso(No* head_livros){
     int total = listar_livros(head_livros);
 
      int id;
-    printf("\nDigite o ID do livro para modificar o progresso: ");
+    printf("\nDigite o ID do livro para editar o progresso (ou 0 para cancelar): ");
     scanf("%d", &id);
+
+    if(id == 0){
+        printf("\n# Operacao cancelada. #\n");
+        return;
+    }
 
     if(id<1 || id>total){
         do{
             printf("'ID' digitado invalido.");
-            printf("\nDigite o ID do livro para ser removido: ");
+            printf("\nDigite o ID do livro para editar o progresso (ou 0 para cancelar): ");
             scanf("%d", &id);
+            
+            if(id == 0){
+                printf("\n# Operacao cancelada. #\n");
+                return;
+            }
         } while(id<1 || id>total);
     }
 
@@ -185,6 +202,19 @@ void editar_progresso(No* head_livros){
     for(int i=1; i<id; i++){
         aux = aux->prox;
     }
+
+    printf("Progresso atual do livro %s: ", aux->livro.titulo);
+    if(aux->livro.status == NAO_LIDO){
+        printf("- Status de leitura: 'Nao lido'"); 
+    } else if(aux->livro.status == LENDO) {
+        printf("- Status de leitura: 'Lendo'"); 
+        } else
+            printf("- Status de leitura: 'Lido'");
+
+    printf("- Paginas lidas: %d/%d (%d%%)", aux->livro.paginas_lidas, aux->livro.paginas_tot, 
+                                            ((aux->livro.paginas_lidas/aux->livro.paginas_tot)*100));
+
+
     // faz as perguntas do novo status e do numero de paginas lidas igual quando o livro é cadastrado, e modifica através do *aux
      int status;
     do{
@@ -207,6 +237,7 @@ void editar_progresso(No* head_livros){
             printf("\nDigite a quantidade de paginas lidas: ");
             scanf("%d", &aux->livro.paginas_lidas);
     }
+    printf("\n# Status editado com sucesso. #\n"); 
 }
 
 void mostrar_livro(const No* head_livros){
@@ -221,14 +252,24 @@ void mostrar_livro(const No* head_livros){
     int total = listar_livros(head_livros);
      
      int id;
-    printf("\nDigite o ID do livro para mostrar as informacoes: ");
+    printf("\nDigite o ID do livro para mostrar as informacoes (ou 0 para cancelar): ");
     scanf("%d", &id);
+
+    if(id == 0){
+        printf("\n# Operacao cancelada. #\n");
+        return;
+    }
 
     if(id<1 || id>total){
         do{
             printf("'ID' digitado invalido.");
-            printf("\nDigite o ID do livro para ser removido: ");
+            printf("\nDigite o ID do livro para mostrar as informacoes (ou 0 para cancelar): ");
             scanf("%d", &id);
+
+            if(id == 0){
+                printf("\n# Operacao cancelada. #\n");
+                return;
+            }
         } while(id<1 || id>total);
     }
 
@@ -246,10 +287,11 @@ void mostrar_livro(const No* head_livros){
         printf("- Status de leitura: 'Nao lido'"); 
     } else if(aux->livro.status == LENDO) {
         printf("- Status de leitura: 'Lendo'"); 
-    } else
-        printf("- Status de leitura: 'Lido'");
+        } else
+            printf("- Status de leitura: 'Lido'");
 
-    printf("- Paginas lidas: %d (%d%%)", aux->livro.paginas_lidas, ((aux->livro.paginas_lidas/aux->livro.paginas_tot)*100));
+    printf("- Paginas lidas: %d/%d (%d%%)", aux->livro.paginas_lidas, aux->livro.paginas_tot,
+                                            ((aux->livro.paginas_lidas/aux->livro.paginas_tot)*100));
 }
 
 void liberar_lista(No** head_livros){

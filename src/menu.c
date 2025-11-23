@@ -6,7 +6,5 @@
 #include "dados.h"
 
 void menu(){
-    Livro *livros = NULL;
-    int quantidade = load_livros(&livros);
 
 }
