@@ -78,8 +78,8 @@ void adicionar_livro(No **head_livros){
         if(novo->livro.status == NAO_LIDO){
             novo->livro.paginas_lidas = 0;
         } else {
-        printf("\nDigite a quantidade de paginas lidas: ");
-        scanf("%d", &novo->livro.paginas_lidas);
+            printf("\nDigite a quantidade de paginas lidas: ");
+            scanf("%d", &novo->livro.paginas_lidas);
     }
 
     while(getchar() != '\n'); // limpa o buffer do scanf
@@ -91,11 +91,51 @@ void adicionar_livro(No **head_livros){
 }
 
 void listar_livros(const No *head_livros){ //apenas lista um cada livro por id de ordem, titulo e autor com um ponteiro auxiliar
-    printf("\n");
+    printf("\nID: - Titulo: - Do autor: -\n");
     
-    No *aux = head_livros;
-    for(aux; aux != NULL; aux = aux->prox){
+    const No *aux = head_livros;
+     // variavel aux ja ta inicializada, por isso a primeira parte do for está vazia
+    for(; aux != NULL; aux = aux->prox){ 
         int i = 1;
         printf("%d: %s de %s \n",i ,aux->livro.titulo, aux->livro.autor);
+        i++;
     }
+}
+
+void editar_progresso(No* head_livros){
+    printf("\n--- Editar progresso de leitura ---\n");
+
+    listar_livros(head_livros);
+    printf("\nDigite o ID do livro para modificar o progresso: ");
+     int id;
+    scanf("%d", &id);
+   
+    No* aux = head_livros;
+    for(int i=1; i<id; i++){
+        aux = aux->prox;
+    }
+
+     int status;
+    do{
+        printf("\nDigite o novo status de leitura: ");
+        printf("0-Nao lido; 1-Lendo/Iniciado; 2-Lido\n");
+        scanf("%d", &status);
+        if(status >=0 && status <=2){
+            printf("\nOpcao invalida, escolha novamente\n");
+        }
+    } while(status >=0 && status <=2);
+    aux->livro.status = (StatusLivro)status;
+    
+     // define as paginas lidas como as totais caso o status seja lido, e como 0 caso o status seja não lido, e pergunta quantas paginas leu caso o status seja lendo
+    if(aux->livro.status == LIDO){
+        aux->livro.paginas_lidas = aux->livro.paginas_tot;
+    } else 
+        if(aux->livro.status == NAO_LIDO){
+            aux->livro.paginas_lidas = 0;
+        } else {
+            printf("\nDigite a quantidade de paginas lidas: ");
+            scanf("%d", &aux->livro.paginas_lidas);
+    }
+
+    while(getchar() != '\n'); // limpa o buffer do scanf
 }
