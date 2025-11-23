@@ -105,16 +105,17 @@ void listar_livros(const No *head_livros){ //apenas lista um cada livro por id d
 void editar_progresso(No* head_livros){
     printf("\n--- Editar progresso de leitura ---\n");
 
+    // mostra todos os livros e pega o id do livro a ser modificado
     listar_livros(head_livros);
     printf("\nDigite o ID do livro para modificar o progresso: ");
      int id;
     scanf("%d", &id);
-   
-    No* aux = head_livros;
+
+    No* aux = head_livros; //aux para editar sem perder a lista original
     for(int i=1; i<id; i++){
         aux = aux->prox;
     }
-
+    // faz as perguntas do novo status e do numero de paginas lidas igual quando o livro é cadastrado, e modifica através do *aux
      int status;
     do{
         printf("\nDigite o novo status de leitura: ");
@@ -136,6 +137,33 @@ void editar_progresso(No* head_livros){
             printf("\nDigite a quantidade de paginas lidas: ");
             scanf("%d", &aux->livro.paginas_lidas);
     }
+}
 
-    while(getchar() != '\n'); // limpa o buffer do scanf
+void mostrar_livro(const No* head_livros){
+    printf("\n--- Mostrar informacoes de um livro ---\n");
+
+    // mostra todos os livros e pega o id do livro a ser mostrado as infos
+    listar_livros(head_livros);
+    printf("\nDigite o ID do livro para mostrar as informacoes: ");
+     int id;
+    scanf("%d", &id);
+
+    const No* aux = head_livros; //aux para editar sem perder a lista original
+    for(int i=1; i<id; i++){
+        aux = aux->prox;
+    }
+
+    printf("\n- Titulo: %s", aux->livro.titulo);
+    printf("- Autor: %s", aux->livro.autor);
+    printf("- Ano de publicacao: %d", aux->livro.ano);
+    printf("- Numero de paginas: %d", aux->livro.paginas_tot);
+
+    if(aux->livro.status == NAO_LIDO){
+        printf("- Status de leitura: 'Nao lido'"); 
+    } else if(aux->livro.status == LENDO) {
+        printf("- Status de leitura: 'Lendo'"); 
+    } else
+        printf("- Status de leitura: 'Lido'");
+
+    printf("- Paginas lidas: %d (%d%%)", aux->livro.paginas_lidas, ((aux->livro.paginas_lidas/aux->livro.paginas_tot)*100));
 }
