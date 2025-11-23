@@ -3,6 +3,12 @@
 #include <string.h>
 #include "livros.h"
 
+/* MELHORIAS/CORREÇÕES DE BUGAS A FAZER:
+    Verificar se o id de livro digitado é valido, (se não é menor que 0 ou maior que o ID do ultimo livro listado), fazendo um contador 
+    de livros na função adicionar ou na função listar(provavelmente melhor) e mandando para onde precisa, nas funções remover livro, 
+    editar progresso e mostrar livro.
+*/
+
 char *ler_string(){
     char buffer[256]; //buffer para leitura antes da alocação dinamica
 
@@ -90,6 +96,39 @@ void adicionar_livro(No **head_livros){
         printf("\n# Livro registrado com sucesso #\n");
 }
 
+void remover_livro(No **head_livros){
+    printf("\n--- Remover um livro armazenado ---\n");
+
+    if(*head_livros == NULL){
+        printf("\nNenhum livro cadastrado para remover\n");
+        return;
+    }
+
+    // mostra todos os livros e pega o id do livro a ser modificado
+    listar_livros(head_livros);
+    printf("\nDigite o ID do livro para ser removido: ");
+     int id;
+    scanf("%d", &id);
+
+    if(id == 1){    // remoção da lista caso vá remover a cabeça da lista
+        No* aux = *head_livros;
+        *head_livros = (*head_livros)->prox;
+        free(aux);
+        printf("\nLivro removido com sucesso.\n");
+        return;
+    } 
+
+    // remoção da lista caso vá remover a qualquer outro nó da lista
+    No* aux = *head_livros; //aux para editar sem perder a lista original
+    for(int i=2; i<id; i++){
+        aux = aux->prox;
+    }
+    No* temp = aux->prox;
+    aux->prox = temp->prox;
+    free(temp);
+    printf("\nLivro removido com sucesso.\n"); 
+}
+
 void listar_livros(const No *head_livros){ //apenas lista um cada livro por id de ordem, titulo e autor com um ponteiro auxiliar
     printf("\nID: - Titulo: - Do autor: -\n");
     
@@ -166,4 +205,13 @@ void mostrar_livro(const No* head_livros){
         printf("- Status de leitura: 'Lido'");
 
     printf("- Paginas lidas: %d (%d%%)", aux->livro.paginas_lidas, ((aux->livro.paginas_lidas/aux->livro.paginas_tot)*100));
+}
+
+void liberar_lista(No** head_livros){
+    No* aux = *head_livros;
+    while(*head_livros){
+        *head_livros = (*head_livros)->prox;
+        free(aux);
+        aux = *head_livros;
+    }
 }
