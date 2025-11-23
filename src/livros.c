@@ -5,12 +5,16 @@
 
 /* MELHORIAS/CORREÇÕES DE BUGAS A FAZER:
     Verificar se o id de livro digitado é valido, (se não é menor que 0 ou maior que o ID do ultimo livro listado), fazendo um contador 
-    de livros na função adicionar ou na função listar(provavelmente melhor) e mandando para onde precisa, nas funções remover livro, 
-    editar progresso e mostrar livro.
+    de livros na função adicionar ou na função listar(provavelmente melhor) e mandando para onde precisa, nas funções remover livro(ok), 
+    editar progresso(ok) e mostrar livro.
+
+    Melhoria: criar um comando para cancelar operação (ctrl + algo) para cancelar o que está fazendo e voltar ao menu
 */
 
 char *ler_string(){
     char buffer[256]; //buffer para leitura antes da alocação dinamica
+
+    while(getchar() != '\n'); // limpa o buffer do scanf
 
     while(fgets(buffer, sizeof(buffer), stdin) == NULL){ // le a string e se não digitar nada, diz que é invalido e repete
         printf("\nTitulo invaldio, digite novamente: ");
@@ -99,16 +103,26 @@ void adicionar_livro(No **head_livros){
 void remover_livro(No **head_livros){
     printf("\n--- Remover um livro armazenado ---\n");
 
-    if(*head_livros == NULL){
+    if(*head_livros == NULL){   // retorna caso a lista esteja vazia
         printf("\nNenhum livro cadastrado para remover\n");
         return;
     }
 
-    // mostra todos os livros e pega o id do livro a ser modificado
-    listar_livros(head_livros);
-    printf("\nDigite o ID do livro para ser removido: ");
+    // mostra todos os livros e pega o id do livro a ser modificado, e pega a quantidade de livros (contador)
+    int total = listar_livros(head_livros);
+    
      int id;
+    printf("\nDigite o ID do livro para ser removido: ");
     scanf("%d", &id);
+    
+    if(id<1 || id>total){
+        do{
+            printf("'ID' digitado invalido.");
+            printf("\nDigite o ID do livro para ser removido: ");
+            scanf("%d", &id);
+        } while(id<1 || id>total);
+    }
+    
 
     if(id == 1){    // remoção da lista caso vá remover a cabeça da lista
         No* aux = *head_livros;
@@ -129,26 +143,43 @@ void remover_livro(No **head_livros){
     printf("\nLivro removido com sucesso.\n"); 
 }
 
-void listar_livros(const No *head_livros){ //apenas lista um cada livro por id de ordem, titulo e autor com um ponteiro auxiliar
-    printf("\nID: - Titulo: - Do autor: -\n");
+int listar_livros(const No *head_livros){ //apenas lista um cada livro por id de ordem, titulo e autor com um ponteiro auxiliar
+    printf("\nID: -- Titulo: -- Do autor: -\n");
     
+    int contador;
     const No *aux = head_livros;
      // variavel aux ja ta inicializada, por isso a primeira parte do for está vazia
     for(; aux != NULL; aux = aux->prox){ 
         int i = 1;
         printf("%d: %s de %s \n",i ,aux->livro.titulo, aux->livro.autor);
+        contador = i;
         i++;
     }
+    return contador;
 }
 
 void editar_progresso(No* head_livros){
     printf("\n--- Editar progresso de leitura ---\n");
 
+    if(head_livros == NULL){    // retorna caso a lista esteja vazia
+        printf("\nNenhum livro cadastrado para editar\n");
+        return;
+    }
+
     // mostra todos os livros e pega o id do livro a ser modificado
-    listar_livros(head_livros);
-    printf("\nDigite o ID do livro para modificar o progresso: ");
+    int total = listar_livros(head_livros);
+
      int id;
+    printf("\nDigite o ID do livro para modificar o progresso: ");
     scanf("%d", &id);
+
+    if(id<1 || id>total){
+        do{
+            printf("'ID' digitado invalido.");
+            printf("\nDigite o ID do livro para ser removido: ");
+            scanf("%d", &id);
+        } while(id<1 || id>total);
+    }
 
     No* aux = head_livros; //aux para editar sem perder a lista original
     for(int i=1; i<id; i++){
@@ -181,11 +212,25 @@ void editar_progresso(No* head_livros){
 void mostrar_livro(const No* head_livros){
     printf("\n--- Mostrar informacoes de um livro ---\n");
 
+    if(head_livros == NULL){    // retorna caso a lista esteja vazia
+        printf("\nNenhum livro cadastrado para mostrar\n");
+        return;
+    }
+
     // mostra todos os livros e pega o id do livro a ser mostrado as infos
-    listar_livros(head_livros);
-    printf("\nDigite o ID do livro para mostrar as informacoes: ");
+    int total = listar_livros(head_livros);
+     
      int id;
+    printf("\nDigite o ID do livro para mostrar as informacoes: ");
     scanf("%d", &id);
+
+    if(id<1 || id>total){
+        do{
+            printf("'ID' digitado invalido.");
+            printf("\nDigite o ID do livro para ser removido: ");
+            scanf("%d", &id);
+        } while(id<1 || id>total);
+    }
 
     const No* aux = head_livros; //aux para editar sem perder a lista original
     for(int i=1; i<id; i++){

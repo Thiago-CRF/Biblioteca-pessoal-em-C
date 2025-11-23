@@ -28,7 +28,7 @@ void remover_livro(No **head_livros); /* fala pra digitar o numero do livro que
 quer remover, e lista todos os livros registrados, dando numeros crescentes de 1 até o ultimo livro
 OBS: recebe **head_livros porque se precisar remover o primeiro da lista ele precisa modificar a cabeça*/
 
-void listar_livros(const No *head_livros);/* OK apenas lista os livros, e da um numero de 1
+int listar_livros(const No *head_livros);/* OK apenas lista os livros, e da um numero de 1
 até o ultimo livro
 */
 void listar_por_status(const No *head_livros, StatusLivro status);/* lista os livros começando
