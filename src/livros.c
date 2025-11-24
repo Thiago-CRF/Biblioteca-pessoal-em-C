@@ -93,6 +93,7 @@ void adicionar_livro(No **head_livros){
 
     while(getchar() != '\n'); // limpa o buffer do scanf
 
+    // no fim coloca o novo livro no fim da lista, para ficar igual ao adicionar no .txt
     novo->prox = NULL;
     if(*head_livros == NULL){
         *head_livros = novo;
@@ -117,7 +118,7 @@ void remover_livro(No **head_livros){
     }
 
     // mostra todos os livros e pega o id do livro a ser modificado, e pega a quantidade de livros (contador)
-    int total = listar_livros(head_livros);
+    int total = listar_livros(*head_livros);
     
      int id;
     printf("\nDigite o ID do livro a ser removido (ou 0 para cancelar): ");
