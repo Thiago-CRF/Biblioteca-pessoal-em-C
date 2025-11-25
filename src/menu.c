@@ -31,11 +31,15 @@ void pausar() { // pausar execução para esperar a pessoa ver a cada escolha
 void menu(No **head_livros, int qtd){
     int opcao;
 
-    if(qtd == -1){
+    if(qtd == -1)
         printf("\n# 'ERRO' ao carregar os livros # \n");
-    } else if(qtd>0) {
-        printf("\n# %d livros carregados com sucesso #\n", qtd);
-    }
+     else 
+        if(qtd>1) 
+            printf("\n# %d livros carregados com sucesso #\n", qtd);
+         else 
+            if(qtd == 1)
+                printf("\n# 1 livro carregado com sucesso #\n");
+            
 
     do{
         printf("\n#### BIBLIOTECA PESSOAL ####\n");

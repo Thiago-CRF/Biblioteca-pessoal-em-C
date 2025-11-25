@@ -155,6 +155,7 @@ void remover_livro(No **head_livros){
         No* aux = *head_livros;
         *head_livros = (*head_livros)->prox;
         free(aux);
+        reescrever_livros(*head_livros);
         printf("\n# Livro removido com sucesso. #\n");
         return;
     } 
@@ -167,6 +168,7 @@ void remover_livro(No **head_livros){
     No* temp = aux->prox;
     aux->prox = temp->prox;
     free(temp);
+    free(aux);
 
     if(reescrever_livros(*head_livros) != 0){
         printf("\n# 'ERRO' ao salvar remoção #\n");
@@ -237,7 +239,7 @@ void editar_progresso(No* head_livros){
         } else
             printf("\n- Status de leitura: 'Lido'");
 
-    int porcentagem = ((aux->livro.paginas_lidas/aux->livro.paginas_tot)*100);
+    int porcentagem = (aux->livro.paginas_lidas / aux->livro.paginas_tot) * 100;
     printf("\n- Paginas lidas: %d/%d (%d%%)", aux->livro.paginas_lidas, aux->livro.paginas_tot, porcentagem);
 
 
@@ -322,8 +324,7 @@ void mostrar_livro(const No* head_livros){
         } else
             printf("\n- Status de leitura: 'Lido'");
 
-    int porcentagem = ((aux->livro.paginas_lidas/aux->livro.paginas_tot)*100);
-    printf("%d", porcentagem);
+    int porcentagem = (aux->livro.paginas_lidas / aux->livro.paginas_tot) * 100;
     printf("\n- Paginas lidas: %d/%d (%d%%)", aux->livro.paginas_lidas, aux->livro.paginas_tot, porcentagem);
 
     printf("\n");

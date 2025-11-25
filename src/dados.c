@@ -118,7 +118,7 @@ int salvar_livro(const Livro *livro){
     return 0;
 }
 
-int reescrever_livros(const No* head_livros){   // tirar o const pois ele não reescreve caso seja o primeiro livro da lista
+int reescrever_livros(const No* head_livros){
     FILE *arquivo = fopen(ARQUIVO_LIVROS, "w");
 
     if(!arquivo){
