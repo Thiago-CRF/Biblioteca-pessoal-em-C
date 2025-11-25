@@ -84,6 +84,7 @@ int carregar_livros(No** head_livros){
         novo->prox = NULL;
 
         if(*head_livros == NULL){
+            cont++;
             *head_livros = novo;
             continue;
         }
@@ -117,7 +118,7 @@ int salvar_livro(const Livro *livro){
     return 0;
 }
 
-int reescrever_livros(const No* head_livros){
+int reescrever_livros(const No* head_livros){   // tirar o const pois ele não reescreve caso seja o primeiro livro da lista
     FILE *arquivo = fopen(ARQUIVO_LIVROS, "w");
 
     if(!arquivo){

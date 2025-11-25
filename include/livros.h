@@ -43,4 +43,6 @@ pergunta qual o numero do livro pra exibir e exibe todas as informações do liv
 void liberar_lista(No **head_livros);/* OK libera toda a memória da lista, excluindo toda a lista, deixando
 apenas o endereço da cabeça, que apontará para NULL*/
 
+void limpa_buffer();/* função auxiliar pra limpar o buffer quando precisar e evitar problemas q tive*/
+
 #endif

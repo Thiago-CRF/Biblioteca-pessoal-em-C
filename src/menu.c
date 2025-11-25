@@ -24,16 +24,21 @@ void limpar_tela() {
 
 void pausar() { // pausar execução para esperar a pessoa ver a cada escolha
     printf("\n# Pressione ENTER para continuar... #\n");
-    while(getchar() != '\n'); // limpa o buffer e depois continua
+    limpa_buffer();
     getchar();
 }
 
-void menu(No **head_livros){
+void menu(No **head_livros, int qtd){
     int opcao;
 
+    if(qtd == -1){
+        printf("\n# 'ERRO' ao carregar os livros # \n");
+    } else if(qtd>0) {
+        printf("\n# %d livros carregados com sucesso #\n", qtd);
+    }
+
     do{
-        limpar_tela();
-        printf("#### BIBLIOTECA PESSOAL ####\n");
+        printf("\n#### BIBLIOTECA PESSOAL ####\n");
 
         printf("    [1] Adicionar livro\n");
         printf("    [2] Remover livro\n");
@@ -79,6 +84,6 @@ void menu(No **head_livros){
                 printf("\n# Opcao invalida, selecione uma opçao valida do menu #\n");
                 pausar();     
         }
-
+    limpar_tela();
     } while(opcao != 0);
 }

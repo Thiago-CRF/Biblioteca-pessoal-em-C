@@ -9,10 +9,13 @@
     como tem na função de remover livro.
 */
 
+void limpa_buffer(){
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
 char *ler_string(){
     char buffer[256]; //buffer para leitura antes da alocação dinamica
-
-    while(getchar() != '\n'); // limpa o buffer do scanf
 
     while(fgets(buffer, sizeof(buffer), stdin) == NULL){ // le a string e se não digitar nada, diz que é invalido e repete
         printf("\nTitulo invaldio, digite novamente: ");
@@ -41,16 +44,15 @@ void adicionar_livro(No **head_livros){
     No *novo = (No*)malloc(sizeof(No));
 
     printf("\n--- Adicionar novo livro ---\n");
+    limpa_buffer();
 
     // le o titulo com a função ler string, e retorna caso de erro de alocação de memoria
-        printf("Digite o titulo do livro: ");
+    printf("\nDigite o titulo do livro: ");
     novo->livro.titulo = ler_string();
     if(novo->livro.titulo == NULL){
         free(novo);
         return;
     }
-
-    while(getchar() != '\n'); // limpa o buffer do scanf
 
     // le o autor com a função ler string, e retorna caso de erro de alocação de memoria
     printf("\nDigite o nome do autor: ");
@@ -59,7 +61,6 @@ void adicionar_livro(No **head_livros){
         free(novo);
         return;
     }
-    while(getchar() != '\n'); // limpa o buffer do scanf
 
     printf("\nDigite o ano de publicacao: "); //pega o ano de publicação do livro
     scanf("%d", &novo->livro.ano);
@@ -73,7 +74,7 @@ void adicionar_livro(No **head_livros){
      { int status;
     do{
         printf("\nDigite a opcao do status de leitura: ");
-        printf("(0-Nao lido; 1-Lendo/Iniciado; 2-Lido)\n");
+        printf("(0-Nao lido; 1-Lendo/Iniciado; 2-Lido): ");
         scanf("%d", &status);
         if(status <0 || status >2){
             printf("\nOpcao invalida, escolha novamente\n");
@@ -92,8 +93,6 @@ void adicionar_livro(No **head_livros){
             printf("\nDigite a quantidade de paginas lidas: ");
             scanf("%d", &novo->livro.paginas_lidas);
     }
-
-    while(getchar() != '\n'); // limpa o buffer do scanf
 
     // salva o livro adicionado no .txt 
     if(salvar_livro(&novo->livro) == -1){
@@ -115,7 +114,7 @@ void adicionar_livro(No **head_livros){
     }
     atual->prox = novo;
 
-        printf("\n# Livro registrado e salvo com sucesso. #\n");
+    printf("\n# Livro registrado e salvo com sucesso. #\n");
 }
 
 void remover_livro(No **head_livros){
@@ -169,7 +168,7 @@ void remover_livro(No **head_livros){
     aux->prox = temp->prox;
     free(temp);
 
-    if(reescrever_livros(*head_livros) == -1){
+    if(reescrever_livros(*head_livros) != 0){
         printf("\n# 'ERRO' ao salvar remoção #\n");
     }
 
@@ -182,12 +181,13 @@ int listar_livros(const No *head_livros){ //apenas lista um cada livro por id de
     int contador;
     const No *aux = head_livros;
      // variavel aux ja ta inicializada, por isso a primeira parte do for está vazia
-    for(; aux != NULL; aux = aux->prox){ 
-        int i = 1;
-        printf("%d: %s de %s \n",i ,aux->livro.titulo, aux->livro.autor);
+    int i = 1;
+     for(; aux != NULL; aux = aux->prox){ 
+        printf("[%d]: '%s' de '%s' \n",i ,aux->livro.titulo, aux->livro.autor);
         contador = i;
         i++;
     }
+
     return contador;
 }
 
@@ -229,29 +229,29 @@ void editar_progresso(No* head_livros){
         aux = aux->prox;
     }
 
-    printf("Progresso atual do livro %s: ", aux->livro.titulo);
+    printf("\nProgresso atual do livro %s: ", aux->livro.titulo);
     if(aux->livro.status == NAO_LIDO){
-        printf("- Status de leitura: 'Nao lido'"); 
+        printf("\n- Status de leitura: 'Nao lido'"); 
     } else if(aux->livro.status == LENDO) {
-        printf("- Status de leitura: 'Lendo'"); 
+        printf("\n- Status de leitura: 'Lendo'"); 
         } else
-            printf("- Status de leitura: 'Lido'");
+            printf("\n- Status de leitura: 'Lido'");
 
-    printf("- Paginas lidas: %d/%d (%d%%)", aux->livro.paginas_lidas, aux->livro.paginas_tot, 
-                                            ((aux->livro.paginas_lidas/aux->livro.paginas_tot)*100));
+    int porcentagem = ((aux->livro.paginas_lidas/aux->livro.paginas_tot)*100);
+    printf("\n- Paginas lidas: %d/%d (%d%%)", aux->livro.paginas_lidas, aux->livro.paginas_tot, porcentagem);
 
 
     // faz as perguntas do novo status e do numero de paginas lidas igual quando o livro é cadastrado, e modifica através do *aux
      int status;
     do{
-        printf("\nDigite o novo status de leitura: ");
+        printf("\n\nDigite o novo status de leitura: ");
         printf("0-Nao lido; 1-Lendo/Iniciado; 2-Lido\n");
         scanf("%d", &status);
         
-        if(status >=0 && status <=2){
+        if(status <0 && status >2){
             printf("\nOpcao invalida, escolha novamente\n");
         }
-    } while(status >=0 && status <=2);
+    } while(status <0 && status >2);
     aux->livro.status = (StatusLivro)status;
     
      // define as paginas lidas como as totais caso o status seja lido, e como 0 caso o status seja não lido, e pergunta quantas paginas leu caso o status seja lendo
@@ -310,20 +310,23 @@ void mostrar_livro(const No* head_livros){
         aux = aux->prox;
     }
 
-    printf("\n- Titulo: %s", aux->livro.titulo);
-    printf("- Autor: %s", aux->livro.autor);
-    printf("- Ano de publicacao: %d", aux->livro.ano);
-    printf("- Numero de paginas: %d", aux->livro.paginas_tot);
+    printf("\n- Titulo: '%s'", aux->livro.titulo);
+    printf("\n- Autor: '%s'", aux->livro.autor);
+    printf("\n- Ano de publicacao: %d", aux->livro.ano);
+    printf("\n- Numero de paginas: %d", aux->livro.paginas_tot);
 
     if(aux->livro.status == NAO_LIDO){
-        printf("- Status de leitura: 'Nao lido'"); 
+        printf("\n- Status de leitura: 'Nao lido'"); 
     } else if(aux->livro.status == LENDO) {
-        printf("- Status de leitura: 'Lendo'"); 
+        printf("\n- Status de leitura: 'Lendo'"); 
         } else
-            printf("- Status de leitura: 'Lido'");
+            printf("\n- Status de leitura: 'Lido'");
 
-    printf("- Paginas lidas: %d/%d (%d%%)", aux->livro.paginas_lidas, aux->livro.paginas_tot,
-                                            ((aux->livro.paginas_lidas/aux->livro.paginas_tot)*100));
+    int porcentagem = ((aux->livro.paginas_lidas/aux->livro.paginas_tot)*100);
+    printf("%d", porcentagem);
+    printf("\n- Paginas lidas: %d/%d (%d%%)", aux->livro.paginas_lidas, aux->livro.paginas_tot, porcentagem);
+
+    printf("\n");
 }
 
 void liberar_lista(No** head_livros){
