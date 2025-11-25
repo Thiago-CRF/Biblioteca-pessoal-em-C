@@ -1,7 +1,7 @@
 #ifndef DADOS_H
 #define DADOS_H
 
-#define ARQUIVO_LIVROS "livros.txt"
+#define ARQUIVO_LIVROS "data/livros.txt"
 
 /* vai carregar todos os livros para a lista encadeada,
 a função retorna a quantidade de livros que foram carregados e -1 caso dê qualquer erro*/

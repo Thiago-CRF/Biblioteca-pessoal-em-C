@@ -31,7 +31,7 @@ OBS: recebe **head_livros porque se precisar remover o primeiro da lista ele pre
 int listar_livros(const No *head_livros);/* OK apenas lista os livros, e da um numero de 1
 até o ultimo livro
 */
-void listar_por_status(const No *head_livros, StatusLivro status);/* lista os livros começando
+void listar_por_status(const No *head_livros);/* lista os livros começando
 pelos lidos, depois pelos lendo e então não lidos, formatando para ficar separado e facil de entender*/
 
 void editar_progresso(No *head_livros);/* OK Lista os livros pra perguntar qual quer editar o progresso

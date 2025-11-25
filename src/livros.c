@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "livros.h"
+#include "dados.h"
 
 /* MELHORIAS/CORREÇÕES DE BUGAS A FAZER:
     Melhoria: criar um comando para cancelar operação (ctrl + algo) para cancelar o que está fazendo e voltar ao menu, ou colocar um opção de cancelamento para tudo o que for fazer,
@@ -32,8 +33,6 @@ char *ler_string(){
 
     strcpy(str, buffer); // copia a string do buffer para a memória alocada
 
-    while(getchar() != '\n'); // limpa o buffer do scanf
-
     return str;
 }
 
@@ -51,18 +50,21 @@ void adicionar_livro(No **head_livros){
         return;
     }
 
+    while(getchar() != '\n'); // limpa o buffer do scanf
+
     // le o autor com a função ler string, e retorna caso de erro de alocação de memoria
-        printf("\nDigite o nome do autor: ");
+    printf("\nDigite o nome do autor: ");
     novo->livro.autor = ler_string();
     if(novo->livro.autor == NULL){
         free(novo);
         return;
     }
+    while(getchar() != '\n'); // limpa o buffer do scanf
 
-    printf("\nDigite o ano de publicacao"); //pega o ano de publicação do livro
+    printf("\nDigite o ano de publicacao: "); //pega o ano de publicação do livro
     scanf("%d", &novo->livro.ano);
 
-    printf("\nDigite o total de paginas"); // pega o numero total de paginas do livro
+    printf("\nDigite o total de paginas: "); // pega o numero total de paginas do livro
     scanf("%d", &novo->livro.paginas_tot);
 
     /* fiz um escopo dessa parte para a variavel status só existir aqui
@@ -70,13 +72,13 @@ void adicionar_livro(No **head_livros){
     status do livro. utilizando que o typedef do C determina cada tipo como 0, 1, 2... em ordem, e uso o "escopo" (StatusLivro) para ler assim*/
      { int status;
     do{
-        printf("\nDigite a opcao do status de leitura:");
-        printf("0-Nao lido; 1-Lendo/Iniciado; 2-Lido\n");
+        printf("\nDigite a opcao do status de leitura: ");
+        printf("(0-Nao lido; 1-Lendo/Iniciado; 2-Lido)\n");
         scanf("%d", &status);
-        if(status >=0 || status <=2){
+        if(status <0 || status >2){
             printf("\nOpcao invalida, escolha novamente\n");
         }
-    } while(status >=0 && status <=2);
+    } while(status <0 || status >2);
     novo->livro.status = (StatusLivro)status;
      }
 
@@ -93,6 +95,13 @@ void adicionar_livro(No **head_livros){
 
     while(getchar() != '\n'); // limpa o buffer do scanf
 
+    // salva o livro adicionado no .txt 
+    if(salvar_livro(&novo->livro) == -1){
+        printf("\n# 'ERRO' ao salvar livro, operação cancelada # \n");
+        free(novo);
+        return;
+    }
+
     // no fim coloca o novo livro no fim da lista, para ficar igual ao adicionar no .txt
     novo->prox = NULL;
     if(*head_livros == NULL){
@@ -106,7 +115,7 @@ void adicionar_livro(No **head_livros){
     }
     atual->prox = novo;
 
-        printf("\n# Livro registrado com sucesso. #\n");
+        printf("\n# Livro registrado e salvo com sucesso. #\n");
 }
 
 void remover_livro(No **head_livros){
@@ -159,6 +168,11 @@ void remover_livro(No **head_livros){
     No* temp = aux->prox;
     aux->prox = temp->prox;
     free(temp);
+
+    if(reescrever_livros(*head_livros) == -1){
+        printf("\n# 'ERRO' ao salvar remoção #\n");
+    }
+
     printf("\n# Livro removido com sucesso. #\n"); 
 }
 
@@ -233,6 +247,7 @@ void editar_progresso(No* head_livros){
         printf("\nDigite o novo status de leitura: ");
         printf("0-Nao lido; 1-Lendo/Iniciado; 2-Lido\n");
         scanf("%d", &status);
+        
         if(status >=0 && status <=2){
             printf("\nOpcao invalida, escolha novamente\n");
         }
@@ -249,6 +264,11 @@ void editar_progresso(No* head_livros){
             printf("\nDigite a quantidade de paginas lidas: ");
             scanf("%d", &aux->livro.paginas_lidas);
     }
+
+    if(reescrever_livros(head_livros) == -1){
+        printf("\n# 'ERRO' ao salvar edicao #\n");
+    }
+
     printf("\n# Status editado com sucesso. #\n"); 
 }
 
