@@ -46,10 +46,11 @@ void menu(No **head_livros, int qtd){
 
         printf("    [1] Adicionar livro\n");
         printf("    [2] Remover livro\n");
-        printf("    [3] Listar livros cadastrados\n");
-        printf("    [4] Listar livros cadastrados por status\n");
-        printf("    [5] Exibir informacoes de um livro\n");
-        printf("    [6] Editar progresso de leitura\n");
+        printf("    [3] Listar livros de forma simples\n");
+        printf("    [4] Listar livros com detalhes\n");
+        printf("    [5] Listar livros por status\n");
+        printf("    [6] Exibir informacoes de um livro\n");
+        printf("    [7] Editar progresso de leitura\n");
         printf("    [0] Sair\n\n");
         
         printf("Digite uma opcao: ");
@@ -69,14 +70,18 @@ void menu(No **head_livros, int qtd){
                 pausar();
                 break;
             case 4:
-                //listar_por_status(*head_livros);
+                listar_detalhado(*head_livros);
                 pausar();
                 break;
             case 5:
-                mostrar_livro(*head_livros);
+                //listar_por_status(*head_livros);
                 pausar();
                 break;
             case 6:
+                mostrar_livro(*head_livros);
+                pausar();
+                break;
+            case 7:
                 editar_progresso(*head_livros);
                 pausar();
                 break;

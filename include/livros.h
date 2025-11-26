@@ -29,8 +29,11 @@ quer remover, e lista todos os livros registrados, dando numeros crescentes de 1
 OBS: recebe **head_livros porque se precisar remover o primeiro da lista ele precisa modificar a cabeça*/
 
 int listar_livros(const No *head_livros);/* OK apenas lista os livros, e da um numero de 1
-até o ultimo livro
-*/
+até o ultimo livro */
+
+void listar_detalhado(const No *head_livros);/* mostra todos os livros de forma detalhada, como mostra em mostrar livros, mas listando todos em vez de 
+    só um */
+
 void listar_por_status(const No *head_livros);/* lista os livros começando
 pelos lidos, depois pelos lendo e então não lidos, formatando para ficar separado e facil de entender*/
 

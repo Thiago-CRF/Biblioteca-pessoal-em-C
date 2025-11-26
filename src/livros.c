@@ -6,8 +6,13 @@
 
 /* MELHORIAS/CORREÇÕES DE BUGAS A FAZER:
     Melhorias:
-    Fazer função pra mostrar todos os livros de forma detalhada, como mostra em mostrar livros, mas listando todos em vez de 
+    Fazer uma interface melhor, com cor de fundo da janela e cores melhores no texto com as bibliotecas conio e windows, mas ainda no cmd
+    
+    Fazer um comando pra voltar e cancelar operação a qualquer momento
+    
+    [FEITO]Fazer função pra mostrar todos os livros de forma detalhada, como mostra em mostrar livros, mas listando todos em vez de 
     só um
+    
     Fazer a implementação da função listar por status, como esbocei em livros.h
 */
 
@@ -180,19 +185,59 @@ void remover_livro(No **head_livros){
 }
 
 int listar_livros(const No *head_livros){ //apenas lista um cada livro por id de ordem, titulo e autor com um ponteiro auxiliar
-    printf("\nID: -- Titulo: -- Do autor: -\n");
     
-    int contador;
+    if(head_livros == NULL){    // retorna caso a lista esteja vazia
+        printf("\nNenhum livro cadastrado para mostrar\n");
+        return 0;
+    }
+    
+    printf("\nID: -- Titulo: ------ Do autor: -\n");
+    
+    // variavel aux ja ta inicializada, por isso a primeira parte do for está vazia
     const No *aux = head_livros;
-     // variavel aux ja ta inicializada, por isso a primeira parte do for está vazia
     int i = 1;
-     for(; aux != NULL; aux = aux->prox){ 
+
+    for(; aux != NULL; aux = aux->prox){ 
         printf("[%d]: '%s' de '%s' \n",i ,aux->livro.titulo, aux->livro.autor);
-        contador = i;
         i++;
     }
 
-    return contador;
+    return i-1;
+}
+
+void listar_detalhado(const No *head_livros){
+    printf("\n--- Lista detalhada dos livros ---\n");
+
+    if(head_livros == NULL){    // retorna caso a lista esteja vazia
+        printf("\nNenhum livro cadastrado para mostrar\n");
+        return;
+    }
+
+    const No* aux = head_livros;
+    int contador = 1;
+    
+    for(; aux != NULL; aux = aux->prox){
+        
+        printf("\n[%d]", contador);
+        printf("\n- Titulo: '%s'", aux->livro.titulo);
+        printf("\n- Autor: '%s'", aux->livro.autor);
+        printf("\n- Ano de publicacao: %d", aux->livro.ano);
+        printf("\n- Numero de paginas: %d", aux->livro.paginas_tot);
+
+        int porcentagem = ((float)aux->livro.paginas_lidas / (float)aux->livro.paginas_tot) * 100;
+
+        if(aux->livro.status == NAO_LIDO){
+            printf("\n- Status de leitura: 'Nao lido'"); 
+        } else if(aux->livro.status == LENDO) {
+            printf("\n- Status de leitura: 'Lendo'"); 
+            } else
+                printf("\n- Status de leitura: 'Lido'");
+                
+        printf("\n- Paginas lidas: %d/%d (%d%%)", aux->livro.paginas_lidas, aux->livro.paginas_tot, porcentagem);
+
+        printf("\n");
+        contador++;
+    }
 }
 
 void editar_progresso(No* head_livros){
