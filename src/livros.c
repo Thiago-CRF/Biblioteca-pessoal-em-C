@@ -5,8 +5,10 @@
 #include "dados.h"
 
 /* MELHORIAS/CORREÇÕES DE BUGAS A FAZER:
-    Melhoria: criar um comando para cancelar operação (ctrl + algo) para cancelar o que está fazendo e voltar ao menu, ou colocar um opção de cancelamento para tudo o que for fazer,
-    como tem na função de remover livro.
+    Melhorias:
+    Fazer função pra mostrar todos os livros de forma detalhada, como mostra em mostrar livros, mas listando todos em vez de 
+    só um
+    Fazer a implementação da função listar por status, como esbocei em livros.h
 */
 
 void limpa_buffer(){
@@ -231,6 +233,8 @@ void editar_progresso(No* head_livros){
         aux = aux->prox;
     }
 
+    int porcentagem = ((float)aux->livro.paginas_lidas / (float)aux->livro.paginas_tot) * 100;
+    
     printf("\nProgresso atual do livro %s: ", aux->livro.titulo);
     if(aux->livro.status == NAO_LIDO){
         printf("\n- Status de leitura: 'Nao lido'"); 
@@ -239,7 +243,6 @@ void editar_progresso(No* head_livros){
         } else
             printf("\n- Status de leitura: 'Lido'");
 
-    int porcentagem = (aux->livro.paginas_lidas / aux->livro.paginas_tot) * 100;
     printf("\n- Paginas lidas: %d/%d (%d%%)", aux->livro.paginas_lidas, aux->livro.paginas_tot, porcentagem);
 
 
@@ -271,6 +274,8 @@ void editar_progresso(No* head_livros){
         printf("\n# 'ERRO' ao salvar edicao #\n");
     }
 
+    porcentagem = ((float)aux->livro.paginas_lidas / (float)aux->livro.paginas_tot) * 100;
+    printf("\n- Novo progresso: %d/%d (%d%%)", aux->livro.paginas_lidas, aux->livro.paginas_tot, porcentagem);
     printf("\n# Status editado com sucesso. #\n"); 
 }
 
@@ -317,14 +322,15 @@ void mostrar_livro(const No* head_livros){
     printf("\n- Ano de publicacao: %d", aux->livro.ano);
     printf("\n- Numero de paginas: %d", aux->livro.paginas_tot);
 
+    int porcentagem = ((float)aux->livro.paginas_lidas / (float)aux->livro.paginas_tot) * 100;
+
     if(aux->livro.status == NAO_LIDO){
         printf("\n- Status de leitura: 'Nao lido'"); 
     } else if(aux->livro.status == LENDO) {
         printf("\n- Status de leitura: 'Lendo'"); 
         } else
             printf("\n- Status de leitura: 'Lido'");
-
-    int porcentagem = (aux->livro.paginas_lidas / aux->livro.paginas_tot) * 100;
+            
     printf("\n- Paginas lidas: %d/%d (%d%%)", aux->livro.paginas_lidas, aux->livro.paginas_tot, porcentagem);
 
     printf("\n");

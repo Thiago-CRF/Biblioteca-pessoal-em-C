@@ -85,7 +85,7 @@ void menu(No **head_livros, int qtd){
                 pausar();
                 break;
             default:
-                printf("\n# Opcao invalida, selecione uma opçao valida do menu #\n");
+                printf("\n# Opcao invalida, selecione uma opcao valida do menu #\n");
                 pausar();     
         }
     limpar_tela();
