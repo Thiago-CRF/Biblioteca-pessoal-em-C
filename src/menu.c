@@ -74,7 +74,7 @@ void menu(No **head_livros, int qtd){
                 pausar();
                 break;
             case 5:
-                //listar_por_status(*head_livros);
+                listar_por_status(*head_livros);
                 pausar();
                 break;
             case 6:

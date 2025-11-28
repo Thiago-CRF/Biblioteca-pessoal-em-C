@@ -13,7 +13,7 @@
     [FEITO]Fazer função pra mostrar todos os livros de forma detalhada, como mostra em mostrar livros, mas listando todos em vez de 
     só um
     
-    Fazer a implementação da função listar por status, como esbocei em livros.h
+    [FEITO]Fazer a implementação da função listar por status, como esbocei em livros.h
 */
 
 void limpa_buffer(){
@@ -237,6 +237,80 @@ void listar_detalhado(const No *head_livros){
 
         printf("\n");
         contador++;
+    }
+}
+
+void listar_por_status(const No *head_livros){
+
+    printf("\n\n--- Lista de livros lidos ---\n");
+    const No* aux = head_livros;
+    int contador = 1;
+    
+    for(; aux != NULL; aux = aux->prox){
+        
+        if(aux->livro.status == 2){
+            printf("\n[%d]", contador);
+            printf("\n- Titulo: '%s'", aux->livro.titulo);
+            printf("\n- Autor: '%s'", aux->livro.autor);
+            printf("\n- Ano de publicacao: %d", aux->livro.ano);
+            printf("\n- Numero de paginas: %d", aux->livro.paginas_tot);
+
+            int porcentagem = ((float)aux->livro.paginas_lidas / (float)aux->livro.paginas_tot) * 100;                
+            printf("\n- Paginas lidas: %d/%d (%d%%)", aux->livro.paginas_lidas, aux->livro.paginas_tot, porcentagem);
+
+            printf("\n");
+            contador++;
+        }
+    }
+    if(contador == 1){
+        printf("\n### Nenhum livro lido cadastrado ### \n");
+    }
+
+    printf("\n\n\n--- Lista de livros iniciados ---\n");
+    aux = head_livros;
+    contador = 1;
+    
+    for(; aux != NULL; aux = aux->prox){
+        
+        if(aux->livro.status == 1){
+            printf("\n[%d]", contador);
+            printf("\n- Titulo: '%s'", aux->livro.titulo);
+            printf("\n- Autor: '%s'", aux->livro.autor);
+            printf("\n- Ano de publicacao: %d", aux->livro.ano);
+            printf("\n- Numero de paginas: %d", aux->livro.paginas_tot);
+
+            int porcentagem = ((float)aux->livro.paginas_lidas / (float)aux->livro.paginas_tot) * 100;                
+            printf("\n- Paginas lidas: %d/%d (%d%%)", aux->livro.paginas_lidas, aux->livro.paginas_tot, porcentagem);
+
+            printf("\n");
+            contador++;
+        }
+    }
+    if(contador == 1){
+        printf("\n### Nenhum livro iniciado cadastrado ### \n");
+    }
+
+    printf("\n\n\n--- Lista de livros nao lidos ---\n");
+    aux = head_livros;
+    contador = 1;
+    
+    for(; aux != NULL; aux = aux->prox){
+        
+       if(aux->livro.status == 0){ 
+            printf("\n[%d]", contador);
+            printf("\n- Titulo: '%s'", aux->livro.titulo);
+            printf("\n- Autor: '%s'", aux->livro.autor);
+            printf("\n- Ano de publicacao: %d", aux->livro.ano);
+            printf("\n- Numero de paginas: %d", aux->livro.paginas_tot);
+         
+            printf("\n- Paginas lidas: %d/%d (0%%)", aux->livro.paginas_lidas, aux->livro.paginas_tot);
+
+            printf("\n");
+            contador++;
+        }
+    }
+    if(contador == 1){
+        printf("\n### Nenhum livro nao lido cadastrado ### \n");
     }
 }
 
